@@ -1,6 +1,6 @@
 # G910 Macro Viewer
 
-G910 Macro Viewer is a WPF application that displays the assigned macros of a Logitech G910 keyboard when the Windows key is held down for more than 2 seconds. The macro list is shown in a small window that appears above the start menu on monitor 1.
+G910 Macro Viewer is a WPF application that displays the assigned macros of a Logitech G910 keyboard when the the Ctrl, Alt and Tilde keys are held down. The macro list is shown in a small window that appears above the start menu on monitor 1 (primary monitor).
 
 ## Features
 
