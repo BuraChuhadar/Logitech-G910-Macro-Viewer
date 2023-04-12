@@ -1,0 +1,61 @@
+# .gitignore for WPF projects
+
+# Ignore Visual Studio temporary files, build results, and project files
+**/obj/
+**/bin/
+*.suo
+*.user
+*.userosscache
+*.cache
+*.vspscc
+*_i.c
+*_p.c
+*.bak
+*.ncb
+*.ilk
+*.aps
+*.sbr
+*.scc
+*.swp
+*.swo
+*.log
+*.tlog
+*.idb
+
+# Ignore ReSharper files
+_ReSharper.*
+*.[Rr]e[Ss]harper
+
+# Ignore NuGet packages
+*.nupkg
+**/packages/
+!**/packages/build/
+!**/packages/tools/
+
+# Ignore unneeded project files
+*.pidb
+*.svclog
+*.suo
+*.user
+*.userosscache
+*.cache
+*.vspscc
+*.bak
+*.ncb
+*.aps
+*.scc
+
+# Ignore Windows-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignore Mac-specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Ignore Linux-specific files
+*~
+.directory
+.Trash-*
