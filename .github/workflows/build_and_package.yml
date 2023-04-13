@@ -23,24 +23,36 @@ jobs:
 
     - name: Create temporary MSBuild console app
       run: |
-        dotnet new console -n TempMSBuildApp
-        cd TempMSBuildApp
-        dotnet add package Microsoft.Build.Runtime --version 17.5.0
-        dotnet add package Microsoft.Build.Locator --version 1.5.0
-        @"
-        using System;
-        using Microsoft.Build.Framework;
-        using Microsoft.Build.Logging;
-        using Microsoft.Build.Locator;
-        using Microsoft.Build.Evaluation;
+          dotnet new console -n TempMSBuildApp
+          cd TempMSBuildApp
+          dotnet add package Microsoft.Build.Runtime --version 17.5.0
+          dotnet add package Microsoft.Build.Locator --version 1.5.0
+          @"
+          <Project Sdk=""Microsoft.NET.Sdk"">
+            <PropertyGroup>
+              <OutputType>Exe</OutputType>
+              <TargetFramework>net5.0</TargetFramework>
+            </PropertyGroup>
+            <ItemGroup>
+              <PackageReference Include=""Microsoft.Build.Runtime"" Version=""17.5.0"" ExcludeAssets=""runtime"" />
+              <PackageReference Include=""Microsoft.Build.Locator"" Version=""1.5.0"" ExcludeAssets=""runtime""/>
+            </ItemGroup>
+          </Project>
+          "@ | Set-Content -Path TempMSBuildApp.csproj
+          @"
+          using System;
+          using Microsoft.Build.Framework;
+          using Microsoft.Build.Logging;
+          using Microsoft.Build.Locator;
+          using Microsoft.Build.Evaluation;
 
-        MSBuildLocator.RegisterDefaults();
-        var projectCollection = new ProjectCollection();
-        var logger = new ConsoleLogger();
-        var project = projectCollection.LoadProject(@"""${{ github.workspace }}\G910 Macro Viewer.sln""");
-        bool buildResult = project.Build(logger);
-        if (!buildResult) Environment.Exit(1);
-        "@ | Set-Content -Path Program.cs
+          MSBuildLocator.RegisterDefaults();
+          var projectCollection = new ProjectCollection();
+          var logger = new ConsoleLogger();
+          var project = projectCollection.LoadProject(@"""${{ github.workspace }}\G910 Macro Viewer.sln""");
+          bool buildResult = project.Build(logger);
+          if (!buildResult) Environment.Exit(1);
+          "@ | Set-Content -Path Program.cs
 
     - name: Build solution
       run: |
