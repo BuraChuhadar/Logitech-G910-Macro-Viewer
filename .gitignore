@@ -32,6 +32,9 @@ _ReSharper.*
 !**/packages/build/
 !**/packages/tools/
 
+# Installation packages
+**/Output/
+
 # Ignore unneeded project files
 *.pidb
 *.svclog

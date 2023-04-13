@@ -1,0 +1,42 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to match your default branch name
+  pull_request:
+    branches:
+      - main  # Adjust this to match your default branch name
+
+jobs:
+  build_and_package:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '7.0'  # Adjust this to match your .NET version
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Setup Inno Setup
+      uses: meilke/setup-innosetup@v1.0.0
+      with:
+        version: '6.2.2'  # Adjust this to match your Inno Setup version
+
+    - name: Compile Inno Setup script
+      run: ISCC.exe /O"output" /F"MyInstaller" "installer.iss"  # Adjust the script path and output name
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Installer
+        path: output\G910 Macro Viewer.msi

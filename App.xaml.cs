@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Reflection;
 using System.IO;
 using System.Reflection;
+using NLog;
 
 namespace G910_Macro_Viewer
 {
@@ -20,9 +21,29 @@ namespace G910_Macro_Viewer
     /// </summary>
     public partial class App : System.Windows.Application
     {
-
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public App()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+        }
+
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            Logger.Error(e.Exception, "An unhandled exception occurred in the dispatcher.");
+            e.Handled = true; // Set this to 'true' if you want to prevent the application from closing.
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+            {
+                Logger.Fatal(ex, "An unhandled exception occurred in the application domain.");
+            }
+            else
+            {
+                Logger.Fatal("An unhandled exception occurred in the application domain, but the exception object is not of type 'System.Exception'.");
+            }
         }
 
         private void AddToStartup()

@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Diagnostics;
 using System.Windows.Threading;
-
+using NLog;
 
 namespace G910_Macro_Viewer
 {
@@ -32,6 +32,7 @@ namespace G910_Macro_Viewer
         private DispatcherTimer _timer;
         private MacroWindow _macroWindow;
         private bool _macroWindowShown;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public MainWindow()
         {
@@ -44,6 +45,7 @@ namespace G910_Macro_Viewer
 
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
             _timer.Tick += _timer_Tick;
+            Logger.Info("Initilization Completed");
         }
 
         private void _timer_Tick(object? sender, EventArgs e)
@@ -54,12 +56,14 @@ namespace G910_Macro_Viewer
 
         private void _keyboardHook_KeyDown(object? sender, KeyboardHookEventArgs e)
         {
+            Logger.Info("Key Down Event Triggered");
             if (e.Key == Key.OemTilde && (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.LeftAlt)) || (Keyboard.IsKeyDown(Key.RightCtrl) && Keyboard.IsKeyDown(Key.RightAlt)))
             {
                 ShowMacroWindow();
                 _timer.Start();
                 e.Handled = true;
             }
+            Logger.Info("Key Down Event Triggered Completed");
         }
 
         protected override void OnClosed(EventArgs e)
@@ -76,25 +80,38 @@ namespace G910_Macro_Viewer
 
         private void ShowMacroWindow()
         {
-            if (!_macroWindowShown)
+            try
             {
-                
-
-                if (_macroWindow == null)
+                Logger.Info("Show Macro Window");
+                if (!_macroWindowShown)
                 {
-                    List<MacroInfo> macroInfos = new LogitechDBQuery().GetMacroInfosFromGHubDatabase();
-                    _macroWindow = new MacroWindow(macroInfos);
+
+
+                    if (_macroWindow == null)
+                    {
+                        Logger.Info("Retrieve Macros");
+                        List<MacroInfo> macroInfos = new LogitechDBQuery().GetMacroInfosFromGHubDatabase();
+                        _macroWindow = new MacroWindow(macroInfos);
+                        Logger.Info("Retrieve Macros Completed");
+                    }
                 }
+                else
+                {
+                    Logger.Info("Update Macros");
+                    _macroWindow.UpdateMacroListBox();
+                    Logger.Info("Update Macros Completed");
+                }
+                double screenWidth = SystemParameters.WorkArea.Width;
+                double screenHeight = SystemParameters.WorkArea.Height;
+                _macroWindow.Top = screenHeight - _macroWindow.Height; // Adjust the offset above the Start menu as needed.
+                _macroWindow.Left = screenWidth - _macroWindow.Width;
+                _macroWindow.Show();
             }
-            else
+            catch (Exception ex)
             {
-                _macroWindow.UpdateMacroListBox();
+                Logger.Error(ex);
             }
-            double screenWidth = SystemParameters.WorkArea.Width;
-            double screenHeight = SystemParameters.WorkArea.Height;
-            _macroWindow.Top = screenHeight - _macroWindow.Height; // Adjust the offset above the Start menu as needed.
-            _macroWindow.Left = screenWidth - _macroWindow.Width;
-            _macroWindow.Show();
+            
         }
     }
 }
