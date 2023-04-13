@@ -2,8 +2,8 @@ name: Build and create MSI package
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
@@ -62,3 +62,24 @@ jobs:
       with:
         name: Installer
         path: "output\\G910 Macro Viewer.exe"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Installer to Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: output/G910 Macro Viewer.exe
+        asset_name: G910 Macro Viewer.exe
+        asset_content_type: application/octet-stream
