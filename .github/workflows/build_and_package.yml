@@ -55,7 +55,7 @@ jobs:
     - name: Compile Inno Setup script
       run: |
         $env:ISCC = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-        & $env:ISCC /O"output" /F"MyInstaller" "installer.iss"
+        & $env:ISCC /O"output" /F"G910 Macro Viewer" "installer.iss"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
