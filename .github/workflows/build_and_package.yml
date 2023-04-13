@@ -26,7 +26,7 @@ jobs:
         dotnet new console -n TempMSBuildApp
         cd TempMSBuildApp
         dotnet add package Microsoft.Build.Runtime --version 17.5.0
-        dotnet add package Microsoft.Build.Locator --version 1.5.0
+        dotnet add package Microsoft.Build.Locator --version 1.5.3
         @"
         <Project Sdk='Microsoft.NET.Sdk'>
           <PropertyGroup>
@@ -35,7 +35,7 @@ jobs:
           </PropertyGroup>
           <ItemGroup>
             <PackageReference Include='Microsoft.Build.Runtime' Version='17.5.0' ExcludeAssets='runtime' />
-            <PackageReference Include='Microsoft.Build.Locator' Version='1.5.0' ExcludeAssets='runtime' />
+            <PackageReference Include='Microsoft.Build.Locator' Version='1.5.3' ExcludeAssets='runtime' />
           </ItemGroup>
         </Project>
         "@ | Set-Content -Path TempMSBuildApp.csproj
