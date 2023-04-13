@@ -30,7 +30,8 @@ jobs:
       
     - name: MSBuild
       run: |
-        "G910 Macro Viewer.csproj" -t:rebuild -verbosity:diag -property:Configuration=Release
+        msbuild "${{ github.workspace }}\G910 Macro Viewer.sln" /t:Rebuild /p:Configuration=Release
+      shell: cmd
       
     - name: Download Inno Setup
       run: |
