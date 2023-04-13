@@ -1,26 +1,31 @@
-name: Build and Package
+name: Build and create MSI package
 
 on:
   push:
     branches:
-      - main  # Adjust this to match your default branch name
+      - main
   pull_request:
     branches:
-      - main  # Adjust this to match your default branch name
+      - main
 
 jobs:
-  build_and_package:
+  build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '7.0.x'
 
-    - name: Build
-      run: msbuild /p:Configuration=Release
+    - name: Restore NuGet packages
+      run: msbuild -t:Restore
+
+    - name: Build solution
+      run: msbuild -p:Configuration=Release
 
     - name: Download Inno Setup
       run: |
