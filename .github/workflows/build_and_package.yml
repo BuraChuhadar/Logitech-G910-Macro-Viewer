@@ -26,15 +26,16 @@ jobs:
         dotnet new console -n TempMSBuildApp
         cd TempMSBuildApp
         dotnet add package Microsoft.Build.Runtime --version 17.5.0
-        Add-Content -Path Program.cs -Value @"
-          using Microsoft.Build.Framework;
-          using Microsoft.Build.Logging;
-          using Microsoft.Build.Locator;
+        @"
+        using System;
+        using Microsoft.Build.Framework;
+        using Microsoft.Build.Logging;
+        using Microsoft.Build.Locator;
 
-          MSBuildLocator.RegisterDefaults();
-          var buildResult = Build.BuildEngine.BuildProjectFile(@"""${{ github.workspace }}\G910 Macro Viewer.sln""", null, null, new ConsoleLogger());
-          if (!buildResult) Environment.Exit(1);
-        "@
+        MSBuildLocator.RegisterDefaults();
+        var buildResult = Build.BuildEngine.BuildProjectFile(@"""${{ github.workspace }}\G910 Macro Viewer.sln""", null, null, new ConsoleLogger());
+        if (!buildResult) Environment.Exit(1);
+        "@ | Set-Content -Path Program.cs
 
     - name: Build solution
       run: |
