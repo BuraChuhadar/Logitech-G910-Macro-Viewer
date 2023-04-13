@@ -34,6 +34,7 @@ _ReSharper.*
 
 # Installation packages
 **/Output/
+**/.vs/
 
 # Ignore unneeded project files
 *.pidb
