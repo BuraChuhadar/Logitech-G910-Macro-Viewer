@@ -13,6 +13,7 @@ using System.Reflection;
 using System.IO;
 using System.Reflection;
 using NLog;
+using Microsoft.Win32;
 
 namespace G910_Macro_Viewer
 {
@@ -46,18 +47,29 @@ namespace G910_Macro_Viewer
             }
         }
 
-        private void AddToStartup()
+        private void SetStartup(bool enable)
         {
-            string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "G910 Macro Viewer.lnk");
-            if (!File.Exists(startupFolderPath))
+            string? appName = Assembly.GetExecutingAssembly().GetName().Name;
+            string appPath = $@"{System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\{appName}.exe";
+
+            using (RegistryKey? key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
             {
-                string appPath = Assembly.GetExecutingAssembly().Location;
-                IWshRuntimeLibrary.WshShell wsh = new IWshRuntimeLibrary.WshShell();
-                IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)wsh.CreateShortcut(startupFolderPath);
-                shortcut.TargetPath = appPath;
-                shortcut.Save();
+                if(key == null)
+                {
+                    return;
+                }
+                if (enable)
+                {
+                    key.SetValue(appName, $"\"{appPath}\"");
+                }
+                else
+                {
+                    key.DeleteValue(appName, false);
+                }
             }
         }
+
+
 
         private NotifyIcon _notifyIcon;
 
@@ -66,7 +78,7 @@ namespace G910_Macro_Viewer
             base.OnStartup(e);
 
             // Add your application to Windows startup
-            AddToStartup();
+            SetStartup(true);
 
             MainWindow mainWindow = new MainWindow();
             mainWindow.Hide();
