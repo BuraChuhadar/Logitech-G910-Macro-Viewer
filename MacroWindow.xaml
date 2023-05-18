@@ -24,8 +24,8 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Key}" FontWeight="Bold" Margin="5"/>
-                        <TextBlock Grid.Column="1" Text="{Binding MacroName}" Margin="5"/>
+                        <TextBlock Grid.Column="0" Text="{Binding Key}" FontWeight="Bold" Margin="5" Foreground="Black" />
+                        <TextBlock Grid.Column="1" Text="{Binding MacroName}" Margin="5" Foreground="Black" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
