@@ -1,4 +1,4 @@
-﻿using G910_Macro_Viewer.libs;
+﻿using G910_Logitech_Utilities.libs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,23 +13,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace G910_Macro_Viewer
+namespace G910_Logitech_Utilities
 {
     /// <summary>
     /// Interaction logic for AssignedGkeysWindow.xaml
     /// </summary>
-    public partial class MacroWindow : Window
+    public partial class KeyBindingsWindow : Window
     {
-        public MacroWindow(List<MacroInfo> macroInfos)
+        public KeyBindingsWindow(List<KeyBindingsInfo> KeyBindingsInfos)
         {
             InitializeComponent();
-            MacroListBox.ItemsSource = macroInfos;
+            KeyBindingsListBox.ItemsSource = KeyBindingsInfos;
         }
 
-        public void UpdateMacroListBox()
+        public void UpdateKeyBindingsListBox()
         {
-            List<MacroInfo> updatedMacroList = new LogitechDBQuery().GetMacroInfosFromGHubDatabase();
-            MacroListBox.ItemsSource = updatedMacroList;
+            List<KeyBindingsInfo> updatedKeyBindingsList = new LogitechDBQuery().GetKeyBindingsInfosFromGHubDatabase();
+            KeyBindingsListBox.ItemsSource = updatedKeyBindingsList;
         }
     }
 }
