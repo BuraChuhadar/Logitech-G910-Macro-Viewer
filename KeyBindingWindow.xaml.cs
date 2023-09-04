@@ -22,6 +22,7 @@ namespace G910_Logitech_Utilities
     public partial class KeyBindingsWindow : Window
     {
         List<KeyBindingsInfo> currentKeyBindings = new List<KeyBindingsInfo>();
+        public bool resetTimer = false;
         public KeyBindingsWindow(List<KeyBindingsInfo> KeyBindingsInfos)
         {
             InitializeComponent();
@@ -39,6 +40,7 @@ namespace G910_Logitech_Utilities
 
         private void btnM_Click(object sender, RoutedEventArgs e)
         {
+            resetTimer = true;
             StartFadeOutAnimation();
             var currentButton = (Button)sender;
             var selectedMacro = Enum.TryParse(currentButton.Tag.ToString(), out KeyBindingsInfo.MacroName keyMacroName);
