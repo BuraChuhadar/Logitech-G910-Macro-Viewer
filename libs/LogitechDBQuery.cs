@@ -23,7 +23,7 @@ namespace G910_Logitech_Utilities.libs
         {
             Logger.Info("Retrieving KeyBindings Infos", null);
             List<KeyBindingsInfo> KeyBindingsInfos = new List<KeyBindingsInfo>();
-            List<KeyBindingsInfo> unorderedKeyBindingsInfoList = new List<KeyBindingsInfo>();
+            Dictionary<string, string> unorderedKeyBindingsInfoList = new Dictionary<string, string>();
 
             string settingsDbPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LGHUB", "settings.db");
             Logger.Info($"Check for settings db path {settingsDbPath}", null);
@@ -68,16 +68,15 @@ namespace G910_Logitech_Utilities.libs
                                         var keyboardModel = "g910";
                                         if (cardSlot.Contains(keyboardModel))
                                         {
-                                            var KeyBindingsName = (string)card["name"];
-                                            Logger.Info($"Start adding KeyBindings information: {cardSlot} - {KeyBindingsName}", null);
+                                            var keyBindingsName = (string)card["name"];
+                                            Logger.Info($"Start adding KeyBindings information: {cardSlot} - {keyBindingsName}", null);
 #pragma warning disable CS8601 // Possible null reference assignment.
                                             var keyValueWithMacroNumber = cardSlot.Replace(keyboardModel, "").Replace("_", " ");
-                                            var keyValue = keyValueWithMacroNumber.Split(" ")[1];
-                                            if(keyValue.TrimStart().StartsWith("g"))
+                                            var keyValue = keyValueWithMacroNumber.Split(" ")[1].ToUpper();
+                                            if(keyValue.TrimStart().StartsWith("G"))
                                             {
                                                 var macroName = keyValueWithMacroNumber.Split(" ")[2].ToUpper();
-                                                Enum.TryParse(macroName, out KeyBindingsInfo.MacroName keyMacroName);
-                                                unorderedKeyBindingsInfoList.Add(new KeyBindingsInfo { Key = keyValue, KeyMacroName = keyMacroName, KeyBindingsName = KeyBindingsName });
+                                                unorderedKeyBindingsInfoList.Add(keyValue + "_" + macroName, keyBindingsName);
                                             }
 #pragma warning restore CS8601 // Possible null reference assignment.
                                         }
@@ -95,8 +94,8 @@ namespace G910_Logitech_Utilities.libs
                 for(int j = 0;j<9;j++)
                 {
                     var keyName = $"G{j+1}";
-                    var macroName = Enum.TryParse($"M{i+1}", out KeyBindingsInfo.MacroName keyMacroName);
-                    var keyBindingName = unorderedKeyBindingsInfoList?.FirstOrDefault(c => c.Key.ToLower().Contains(keyName.ToLower()) && c.KeyMacroName == keyMacroName)?.KeyBindingsName ?? "";
+                    _ = Enum.TryParse($"M{i+1}", out KeyBindingsInfo.MacroName keyMacroName);
+                    var keyBindingName = unorderedKeyBindingsInfoList.FirstOrDefault(c=>c.Key == keyName + "_" + keyMacroName).Value ?? "Unassigned";
                     KeyBindingsInfos.Add(new KeyBindingsInfo { Key = keyName, KeyMacroName = keyMacroName, KeyBindingsName = keyBindingName });
                 }
             }

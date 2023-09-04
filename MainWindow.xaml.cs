@@ -56,6 +56,11 @@ namespace G910_Logitech_Utilities
 
         private void _timer_Tick(object? sender, EventArgs e)
         {
+            if (_KeyBindingsWindow.resetTimer)
+            {
+                _KeyBindingsWindow.resetTimer = false;
+                return;
+            }
             CloseKeyBindingsWindow();
             _KeyBindingsWindowShown = true;
         }

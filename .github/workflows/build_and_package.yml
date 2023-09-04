@@ -32,7 +32,7 @@ jobs:
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
     - run: |
-        nuget restore "${{ github.workspace }}\G910 Macro Viewer.sln"
+        nuget restore "${{ github.workspace }}\G910 Logitech Utilities.sln"
       shell: cmd
 
     - name: Setup MSBuild.exe
@@ -44,7 +44,7 @@ jobs:
       
     - name: MSBuild
       run: |
-        msbuild "${{ github.workspace }}\G910 Macro Viewer.sln" /t:Rebuild /p:Configuration=Release
+        msbuild "${{ github.workspace }}\G910 Logitech Utilities.sln" /t:Rebuild /p:Configuration=Release
       shell: cmd
       
     - name: Download Inno Setup
@@ -55,13 +55,13 @@ jobs:
     - name: Compile Inno Setup script
       run: |
         $env:ISCC = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-        & $env:ISCC /O"output" /F"G910 Macro Viewer" "installer.iss"
+        & $env:ISCC /O"output" /F"G910 Logitech Utilities" "installer.iss"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: Installer
-        path: "output\\G910 Macro Viewer.exe"
+        path: "output\\G910 Logitech Utilities.exe"
 
     - name: Create Release
       id: create_release
@@ -80,6 +80,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: output/G910 Macro Viewer.exe
-        asset_name: G910 Macro Viewer.exe
+        asset_path: output/G910 Logitech Utilities.exe
+        asset_name: G910 Logitech Utilities.exe
         asset_content_type: application/octet-stream
