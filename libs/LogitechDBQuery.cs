@@ -11,7 +11,6 @@ using log4net.Repository.Hierarchy;
 using log4net;
 using log4net.Core;
 using System.Reflection;
-using Microsoft.Data.Sqlite;
 
 namespace G910_Logitech_Utilities.libs
 {
