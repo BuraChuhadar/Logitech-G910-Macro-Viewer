@@ -1,4 +1,4 @@
-﻿using G910_Macro_Viewer.libs;
+﻿using G910_Logitech_Utilities.libs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +15,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Diagnostics;
-using System.Windows.Threading;
-using NLog;
+using log4net.Repository.Hierarchy;
+using log4net;
+using log4net.Core;
+using System.Reflection;
 
-namespace G910_Macro_Viewer
+namespace G910_Logitech_Utilities
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -30,9 +31,9 @@ namespace G910_Macro_Viewer
         private bool _keyCombinationPressed;
         private DateTime _winKeyDownTime;
         private DispatcherTimer _timer;
-        private MacroWindow _macroWindow;
-        private bool _macroWindowShown;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private KeyBindingsWindow _KeyBindingsWindow;
+        private bool _KeyBindingsWindowShown;
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(type: MethodBase.GetCurrentMethod().DeclaringType);
 
         public MainWindow()
         {
@@ -45,25 +46,30 @@ namespace G910_Macro_Viewer
 
             _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
             _timer.Tick += _timer_Tick;
-            Logger.Info("Initilization Completed");
+            Logger.Info(message: "Initilization Completed", null);
+
+            Logger.Info("Retrieve KeyBindings", null);
+            List<KeyBindingsInfo> KeyBindingsInfos = new LogitechDBQuery().GetKeyBindingsInfosFromGHubDatabase();
+            _KeyBindingsWindow = new KeyBindingsWindow(KeyBindingsInfos);
+            Logger.Info("Retrieve KeyBindings Completed", null);
         }
 
         private void _timer_Tick(object? sender, EventArgs e)
         {
-            CloseMacroWindow();
-            _macroWindowShown = true;
+            CloseKeyBindingsWindow();
+            _KeyBindingsWindowShown = true;
         }
 
         private void _keyboardHook_KeyDown(object? sender, KeyboardHookEventArgs e)
         {
-            Logger.Info("Key Down Event Triggered");
+            Logger.Info("Key Down Event Triggered", null);
             if (e.Key == Key.OemTilde && (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.LeftAlt)) || (Keyboard.IsKeyDown(Key.RightCtrl) && Keyboard.IsKeyDown(Key.RightAlt)))
             {
-                ShowMacroWindow();
+                ShowKeyBindingsWindow();
                 _timer.Start();
                 e.Handled = true;
             }
-            Logger.Info("Key Down Event Triggered Completed");
+            Logger.Info("Key Down Event Triggered Completed", null);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -72,44 +78,44 @@ namespace G910_Macro_Viewer
             _keyboardHook.Unhook();
         }
 
-        private void CloseMacroWindow()
+        private void CloseKeyBindingsWindow()
         {
-            _macroWindow.Hide();
+            _KeyBindingsWindow.Hide();
         }
 
 
-        private void ShowMacroWindow()
+        private void ShowKeyBindingsWindow()
         {
             try
             {
-                Logger.Info("Show Macro Window");
-                if (!_macroWindowShown)
+                Logger.Info("Show KeyBindings Window", null);
+                if (!_KeyBindingsWindowShown)
                 {
 
 
-                    if (_macroWindow == null)
+                    if (_KeyBindingsWindow == null)
                     {
-                        Logger.Info("Retrieve Macros");
-                        List<MacroInfo> macroInfos = new LogitechDBQuery().GetMacroInfosFromGHubDatabase();
-                        _macroWindow = new MacroWindow(macroInfos);
-                        Logger.Info("Retrieve Macros Completed");
+                        Logger.Info("Retrieve KeyBindings", null);
+                        List<KeyBindingsInfo> KeyBindingsInfos = new LogitechDBQuery().GetKeyBindingsInfosFromGHubDatabase();
+                        _KeyBindingsWindow = new KeyBindingsWindow(KeyBindingsInfos);
+                        Logger.Info("Retrieve KeyBindings Completed", null);
                     }
                 }
                 else
                 {
-                    Logger.Info("Update Macros");
-                    _macroWindow.UpdateMacroListBox();
-                    Logger.Info("Update Macros Completed");
+                    Logger.Info("Update KeyBindings", null);
+                    _KeyBindingsWindow.UpdateKeyBindingsListBox();
+                    Logger.Info("Update KeyBindings Completed", null);
                 }
                 double screenWidth = SystemParameters.WorkArea.Width;
                 double screenHeight = SystemParameters.WorkArea.Height;
-                _macroWindow.Top = screenHeight - _macroWindow.Height; // Adjust the offset above the Start menu as needed.
-                _macroWindow.Left = screenWidth - _macroWindow.Width;
-                _macroWindow.Show();
+                _KeyBindingsWindow.Top = screenHeight - _KeyBindingsWindow.Height; // Adjust the offset above the Start menu as needed.
+                _KeyBindingsWindow.Left = screenWidth - _KeyBindingsWindow.Width;
+                _KeyBindingsWindow.Show();
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Logger.Error("An error occurred", ex);
             }
             
         }

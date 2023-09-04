@@ -7,27 +7,32 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Data.SQLite;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NLog;
+using System.Data.SQLite;
+using log4net.Repository.Hierarchy;
+using log4net;
+using log4net.Core;
+using System.Reflection;
+using Microsoft.Data.Sqlite;
 
-namespace G910_Macro_Viewer.libs
+namespace G910_Logitech_Utilities.libs
 {
     internal class LogitechDBQuery
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        public List<MacroInfo> GetMacroInfosFromGHubDatabase()
+        private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(type: MethodBase.GetCurrentMethod().DeclaringType);
+        public List<KeyBindingsInfo> GetKeyBindingsInfosFromGHubDatabase()
         {
-            Logger.Info("Retrieving Macro Infos");
-            List<MacroInfo> macroInfos = new List<MacroInfo>();
-            List<MacroInfo> unorderedMacroInfoList = new List<MacroInfo>();
+            Logger.Info("Retrieving KeyBindings Infos", null);
+            List<KeyBindingsInfo> KeyBindingsInfos = new List<KeyBindingsInfo>();
+            List<KeyBindingsInfo> unorderedKeyBindingsInfoList = new List<KeyBindingsInfo>();
 
             string settingsDbPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LGHUB", "settings.db");
-            Logger.Info($"Check for settings db path {settingsDbPath}");
+            Logger.Info($"Check for settings db path {settingsDbPath}", null);
             if (!System.IO.File.Exists(settingsDbPath))
             {
-                Logger.Info($"Cannot find the Logitech GHub Settings DB: {settingsDbPath}");
-                return macroInfos;
+                Logger.Info($"Cannot find the Logitech GHub Settings DB: {settingsDbPath}", null);
+                return KeyBindingsInfos;
             }
-            Logger.Info($"Open Connection to the DB");
+            Logger.Info($"Open Connection to the DB", null);
             using (SQLiteConnection connection = new SQLiteConnection($"Data Source={settingsDbPath};Version=3;"))
             {
                 connection.Open();
@@ -38,7 +43,7 @@ namespace G910_Macro_Viewer.libs
                     {
                         if (reader.Read())
                         {
-                            Logger.Info($"Start querying the DB");
+                            Logger.Info($"Start querying the DB", null);
 #pragma warning disable CS8604, CS8602, CS8600 // Possible null reference argument.
                             string jsonData = reader.GetString(0);
 
@@ -63,9 +68,9 @@ namespace G910_Macro_Viewer.libs
                                         var keyboardModel = "g910";
                                         if (cardSlot.Contains(keyboardModel))
                                         {
-                                            var macroName = (string)card["name"];
-                                            Logger.Info($"Start adding macro information: {cardSlot} - {macroName}");
-                                            unorderedMacroInfoList.Add(new MacroInfo { Key = cardSlot.Replace(keyboardModel, "").Replace("_", " "), MacroName = macroName });
+                                            var KeyBindingsName = (string)card["name"];
+                                            Logger.Info($"Start adding KeyBindings information: {cardSlot} - {KeyBindingsName}", null);
+                                            unorderedKeyBindingsInfoList.Add(new KeyBindingsInfo { Key = cardSlot.Replace(keyboardModel, "").Replace("_", " "), KeyBindingsName = KeyBindingsName });
                                         }
                                     }
                                 }
@@ -75,15 +80,15 @@ namespace G910_Macro_Viewer.libs
                     }
                 }
             }
-            Logger.Info("Aggregate macro infos");
-            var m1MacroInfos = unorderedMacroInfoList.Where(macro => macro.Key.Contains("m1")).ToList();
-            var m2MacroInfos = unorderedMacroInfoList.Where(macro => macro.Key.Contains("m2")).ToList();
-            var m3MacroInfos = unorderedMacroInfoList.Where(macro => macro.Key.Contains("m3")).ToList();
-            macroInfos.AddRange(m1MacroInfos);
-            macroInfos.AddRange(m2MacroInfos);
-            macroInfos.AddRange(m3MacroInfos);
-            Logger.Info("Return macro infos");
-            return macroInfos;
+            Logger.Info("Aggregate KeyBindings infos", null);
+            var m1KeyBindingsInfos = unorderedKeyBindingsInfoList.Where(KeyBindings => KeyBindings.Key.Contains("m1")).ToList();
+            var m2KeyBindingsInfos = unorderedKeyBindingsInfoList.Where(KeyBindings => KeyBindings.Key.Contains("m2")).ToList();
+            var m3KeyBindingsInfos = unorderedKeyBindingsInfoList.Where(KeyBindings => KeyBindings.Key.Contains("m3")).ToList();
+            KeyBindingsInfos.AddRange(m1KeyBindingsInfos);
+            KeyBindingsInfos.AddRange(m2KeyBindingsInfos);
+            KeyBindingsInfos.AddRange(m3KeyBindingsInfos);
+            Logger.Info("Return KeyBindings infos", null);
+            return KeyBindingsInfos;
         }
 
     }

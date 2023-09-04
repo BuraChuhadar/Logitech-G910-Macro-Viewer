@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 
-namespace G910_Macro_Viewer.libs
+namespace G910_Logitech_Utilities.libs
 {
 
     public class KeyboardHook
