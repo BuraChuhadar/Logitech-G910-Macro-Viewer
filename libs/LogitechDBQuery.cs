@@ -7,7 +7,6 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Data.SQLite;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Data.SQLite;
 using log4net.Repository.Hierarchy;
 using log4net;
 using log4net.Core;

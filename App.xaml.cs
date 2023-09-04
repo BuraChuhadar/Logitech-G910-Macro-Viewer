@@ -14,12 +14,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Forms;
-using System.Drawing;
-using System.Reflection;
-using System.IO;
-using System.Reflection;
-using NLog;
-using Microsoft.Win32;
 
 namespace G910_Logitech_Utilities
 {
