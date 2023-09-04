@@ -82,7 +82,6 @@ namespace G910_Logitech_Utilities
 
         void App_Startup(object sender, StartupEventArgs e)
         {
-            base.OnStartup(e);
 
             // Add your application to Windows startup
             SetStartup(true);

@@ -5,30 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:G910_Logitech_Utilities"
         mc:Ignorable="d"
-        Title="AssignedGkeysWindow" Height="370" Width="349" ResizeMode="NoResize" ShowInTaskbar="False" Opacity="0.8" WindowStyle="None" Topmost="True">
+        Title="AssignedGkeysWindow" Height="370" Width="766" ResizeMode="NoResize" ShowInTaskbar="False" Opacity="0.8" WindowStyle="None" Topmost="True">
     <Window.Resources>
-        <Style x:Key="NonInteractiveListBoxItem" TargetType="{x:Type ListBoxItem}">
-            <Setter Property="IsHitTestVisible" Value="False" />
-        </Style>
+        <Storyboard x:Key="FadeOutAnimation" >
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.5" />
+        </Storyboard>
+        <Storyboard x:Key="FadeInAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" />
+        </Storyboard>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="169*"/>
-            <ColumnDefinition Width="231*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="KeyBindingsListBox" HorizontalContentAlignment="Stretch" Grid.ColumnSpan="2" ItemContainerStyle="{StaticResource NonInteractiveListBoxItem}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Key}" FontWeight="Bold" Margin="5" Foreground="Black" />
-                        <TextBlock Grid.Column="1" Text="{Binding KeyBindingsName}" Margin="5" Foreground="Black" />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid.Background>
+            <ImageBrush ImageSource="pack://application:,,,/G910 Logitech Utilities;component/assets/G910Keyboard.png" />
+        </Grid.Background>
+        <Canvas Width="Auto" Height="Auto" x:Name="KeyBindingCanvas">
+
+            <TextBlock Canvas.Left="83" Canvas.Top="198" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [0].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="231" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [1].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="265" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [2].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="299" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [3].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="329" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [4].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="219" Canvas.Top="37" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [5].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="256" Canvas.Top="58" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [6].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="291" Canvas.Top="89" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [7].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="326" Canvas.Top="121" HorizontalAlignment="Left" VerticalAlignment="Center" Width="116"  Text="{Binding [8].KeyBindingsName}" Foreground="White" />
+            <Button x:Name="btnM1" Content="M1" Tag="M1" Canvas.Left="356" Canvas.Top="331" Height="22" Width="56" Background="Transparent" Foreground="White" Click="btnM_Click" >
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                            CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button x:Name="btnM2" Content="M2" Tag="M2" Canvas.Left="433" Canvas.Top="331" Height="22" Width="56" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Foreground="White" Click="btnM_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button x:Name="btnM3" Content="M3" Tag="M3" Canvas.Left="513" Canvas.Top="331" Height="22" Width="56" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Foreground="White" Click="btnM_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Canvas>
     </Grid>
 </Window>
