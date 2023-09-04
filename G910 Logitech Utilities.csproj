@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\G910Keyboard.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.15" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.10" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -19,6 +23,12 @@
     <Reference Include="System.Windows.Forms">
       <HintPath>libs\System.Windows.Forms.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\G910Keyboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

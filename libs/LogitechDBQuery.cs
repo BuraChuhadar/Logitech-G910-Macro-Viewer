@@ -71,7 +71,14 @@ namespace G910_Logitech_Utilities.libs
                                             var KeyBindingsName = (string)card["name"];
                                             Logger.Info($"Start adding KeyBindings information: {cardSlot} - {KeyBindingsName}", null);
 #pragma warning disable CS8601 // Possible null reference assignment.
-                                            unorderedKeyBindingsInfoList.Add(new KeyBindingsInfo { Key = cardSlot.Replace(keyboardModel, "").Replace("_", " "), KeyBindingsName = KeyBindingsName });
+                                            var keyValueWithMacroNumber = cardSlot.Replace(keyboardModel, "").Replace("_", " ");
+                                            var keyValue = keyValueWithMacroNumber.Split(" ")[1];
+                                            if(keyValue.TrimStart().StartsWith("g"))
+                                            {
+                                                var macroName = keyValueWithMacroNumber.Split(" ")[2].ToUpper();
+                                                Enum.TryParse(macroName, out KeyBindingsInfo.MacroName keyMacroName);
+                                                unorderedKeyBindingsInfoList.Add(new KeyBindingsInfo { Key = keyValue, KeyMacroName = keyMacroName, KeyBindingsName = KeyBindingsName });
+                                            }
 #pragma warning restore CS8601 // Possible null reference assignment.
                                         }
                                     }
@@ -83,12 +90,7 @@ namespace G910_Logitech_Utilities.libs
                 }
             }
             Logger.Info("Aggregate KeyBindings infos", null);
-            var m1KeyBindingsInfos = unorderedKeyBindingsInfoList.Where(KeyBindings => KeyBindings.Key.Contains("m1")).ToList();
-            var m2KeyBindingsInfos = unorderedKeyBindingsInfoList.Where(KeyBindings => KeyBindings.Key.Contains("m2")).ToList();
-            var m3KeyBindingsInfos = unorderedKeyBindingsInfoList.Where(KeyBindings => KeyBindings.Key.Contains("m3")).ToList();
-            KeyBindingsInfos.AddRange(m1KeyBindingsInfos);
-            KeyBindingsInfos.AddRange(m2KeyBindingsInfos);
-            KeyBindingsInfos.AddRange(m3KeyBindingsInfos);
+            KeyBindingsInfos.AddRange(unorderedKeyBindingsInfoList);
             Logger.Info("Return KeyBindings infos", null);
             return KeyBindingsInfos;
         }
