@@ -12,6 +12,12 @@ namespace G910_Logitech_Utilities.libs
         public required MacroName KeyMacroName { get; set; }
         public required string KeyBindingsName { get; set; }
 
+        public string KeyWithKeyBindingsName { get
+            {
+                return $"{Key.ToUpper()} - {KeyBindingsName}";
+            } 
+        }
+
         public enum MacroName
         {
             M1,

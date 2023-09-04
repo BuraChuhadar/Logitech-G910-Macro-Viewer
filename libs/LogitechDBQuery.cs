@@ -90,7 +90,16 @@ namespace G910_Logitech_Utilities.libs
                 }
             }
             Logger.Info("Aggregate KeyBindings infos", null);
-            KeyBindingsInfos.AddRange(unorderedKeyBindingsInfoList);
+            for(int i = 0;i<3;i++)
+            {
+                for(int j = 0;j<9;j++)
+                {
+                    var keyName = $"G{j+1}";
+                    var macroName = Enum.TryParse($"M{i+1}", out KeyBindingsInfo.MacroName keyMacroName);
+                    var keyBindingName = unorderedKeyBindingsInfoList?.FirstOrDefault(c => c.Key.ToLower().Contains(keyName.ToLower()) && c.KeyMacroName == keyMacroName)?.KeyBindingsName ?? "";
+                    KeyBindingsInfos.Add(new KeyBindingsInfo { Key = keyName, KeyMacroName = keyMacroName, KeyBindingsName = keyBindingName });
+                }
+            }
             Logger.Info("Return KeyBindings infos", null);
             return KeyBindingsInfos;
         }

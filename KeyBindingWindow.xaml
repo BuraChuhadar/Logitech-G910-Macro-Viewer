@@ -23,15 +23,15 @@
         </Grid.Background>
         <Canvas Width="Auto" Height="Auto" x:Name="KeyBindingCanvas">
 
-            <TextBlock Canvas.Left="83" Canvas.Top="198" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [0].KeyBindingsName}" Foreground="White" />
-            <TextBlock Canvas.Left="83" Canvas.Top="231" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [1].KeyBindingsName}" Foreground="White" />
-            <TextBlock Canvas.Left="83" Canvas.Top="265" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [2].KeyBindingsName}" Foreground="White" />
-            <TextBlock Canvas.Left="83" Canvas.Top="299" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [3].KeyBindingsName}" Foreground="White" />
-            <TextBlock Canvas.Left="83" Canvas.Top="329" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [4].KeyBindingsName}" Foreground="White" />
-            <TextBlock Canvas.Left="219" Canvas.Top="37" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [5].KeyBindingsName}" Foreground="White" />
-            <TextBlock Canvas.Left="256" Canvas.Top="58" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [6].KeyBindingsName}" Foreground="White" />
-            <TextBlock Canvas.Left="291" Canvas.Top="89" HorizontalAlignment="Left" VerticalAlignment="Center" Width="115"  Text="{Binding [7].KeyBindingsName}" Foreground="White" />
-            <TextBlock Canvas.Left="326" Canvas.Top="121" HorizontalAlignment="Left" VerticalAlignment="Center" Width="116"  Text="{Binding [8].KeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="198" HorizontalAlignment="Left" VerticalAlignment="Center" Width="143"  Text="{Binding [0].KeyWithKeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="231" HorizontalAlignment="Left" VerticalAlignment="Center" Width="143"  Text="{Binding [1].KeyWithKeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="265" HorizontalAlignment="Left" VerticalAlignment="Center" Width="143"  Text="{Binding [2].KeyWithKeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="299" HorizontalAlignment="Left" VerticalAlignment="Center" Width="143"  Text="{Binding [3].KeyWithKeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="83" Canvas.Top="329" HorizontalAlignment="Left" VerticalAlignment="Center" Width="143"  Text="{Binding [4].KeyWithKeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="219" Canvas.Top="37" HorizontalAlignment="Left" VerticalAlignment="Center" Width="187"  Text="{Binding [5].KeyWithKeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="263" Canvas.Top="64" HorizontalAlignment="Left" VerticalAlignment="Top" Width="198"  Text="{Binding [6].KeyWithKeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="291" Canvas.Top="89" HorizontalAlignment="Left" VerticalAlignment="Center" Width="203"  Text="{Binding [7].KeyWithKeyBindingsName}" Foreground="White" />
+            <TextBlock Canvas.Left="326" Canvas.Top="121" HorizontalAlignment="Left" VerticalAlignment="Center" Width="194"  Text="{Binding [8].KeyWithKeyBindingsName}" Foreground="White" />
             <Button x:Name="btnM1" Content="M1" Tag="M1" Canvas.Left="356" Canvas.Top="331" Height="22" Width="56" Background="Transparent" Foreground="White" Click="btnM_Click" >
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
