@@ -16,7 +16,9 @@ namespace G910_Logitech_Utilities.libs
 {
     internal class LogitechDBQuery
     {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(type: MethodBase.GetCurrentMethod().DeclaringType);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         public List<KeyBindingsInfo> GetKeyBindingsInfosFromGHubDatabase()
         {
             Logger.Info("Retrieving KeyBindings Infos", null);
@@ -68,7 +70,9 @@ namespace G910_Logitech_Utilities.libs
                                         {
                                             var KeyBindingsName = (string)card["name"];
                                             Logger.Info($"Start adding KeyBindings information: {cardSlot} - {KeyBindingsName}", null);
+#pragma warning disable CS8601 // Possible null reference assignment.
                                             unorderedKeyBindingsInfoList.Add(new KeyBindingsInfo { Key = cardSlot.Replace(keyboardModel, "").Replace("_", " "), KeyBindingsName = KeyBindingsName });
+#pragma warning restore CS8601 // Possible null reference assignment.
                                         }
                                     }
                                 }

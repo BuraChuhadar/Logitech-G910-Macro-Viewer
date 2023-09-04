@@ -28,12 +28,12 @@ namespace G910_Logitech_Utilities
     public partial class MainWindow : Window
     {
         private KeyboardHook _keyboardHook;
-        private bool _keyCombinationPressed;
-        private DateTime _winKeyDownTime;
         private DispatcherTimer _timer;
         private KeyBindingsWindow _KeyBindingsWindow;
         private bool _KeyBindingsWindowShown;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(type: MethodBase.GetCurrentMethod().DeclaringType);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         public MainWindow()
         {

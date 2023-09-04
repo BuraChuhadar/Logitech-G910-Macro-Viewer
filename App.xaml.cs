@@ -22,7 +22,9 @@ namespace G910_Logitech_Utilities
     /// </summary>
     public partial class App : System.Windows.Application
     {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(type: MethodBase.GetCurrentMethod().DeclaringType);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         public App()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

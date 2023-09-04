@@ -38,7 +38,9 @@ namespace G910_Logitech_Utilities.libs
         public event EventHandler<KeyboardHookEventArgs> KeyDown;
         public event EventHandler<KeyboardHookEventArgs> KeyUp;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public KeyboardHook()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             _proc = HookCallback;
         }
@@ -58,7 +60,9 @@ namespace G910_Logitech_Utilities.libs
             using (System.Diagnostics.Process curProcess = System.Diagnostics.Process.GetCurrentProcess())
             using (System.Diagnostics.ProcessModule curModule = curProcess.MainModule)
             {
-                return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(lpModuleName: curModule.ModuleName), 0);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
         }
 
