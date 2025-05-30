@@ -73,13 +73,16 @@ jobs:
           }
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Installer
           path: "output\\G910 Logitech Utilities.exe"
-        # Pinning the action version to ensure proper download
-        # Reference: https://github.com/actions/upload-artifact/releases
-        # If issues persist, consider using a specific SHA or tag.
+        # Updated to v4 to resolve compatibility issues
+
+      - name: Debug Runner Version
+        run: |
+          echo "Runner Version: $(Get-Content $env:GITHUB_RUNNER_VERSION)"
+          echo "Operating System: $env:GITHUB_RUNNER_OS"
 
       - name: Create Release
         id: create_release
