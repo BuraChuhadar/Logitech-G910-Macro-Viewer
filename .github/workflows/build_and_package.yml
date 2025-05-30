@@ -3,7 +3,7 @@ name: Build and create MSI package
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   pull_request:
     branches:
       - main
@@ -13,73 +13,99 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Setup .NET 7.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.x'
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install .NET Framework 4.7.2 Developer Pack
-      run: |
-        choco install netfx-4.7.2-devpack -y
+      - name: Setup .NET 7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "7.0.x"
 
-    - name: Setup NuGet.exe for use with actions
-      # You may pin to the exact commit or the version.
-      # uses: NuGet/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f
-      uses: NuGet/setup-nuget@v1.2.0
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-    - run: |
-        nuget restore "${{ github.workspace }}\G910 Logitech Utilities.sln"
-      shell: cmd
+      - name: Install .NET Framework 4.7.2 Developer Pack
+        run: |
+          choco install netfx-4.7.2-devpack -y
 
-    - name: Setup MSBuild.exe
-      # You may pin to the exact commit or the version.
-      # uses: warrenbuckley/Setup-MSBuild@1176db82e64cd53b4944f0e57c2abec104b4782d
-      uses: warrenbuckley/Setup-MSBuild@v1
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      
-    - name: MSBuild
-      run: |
-        msbuild "${{ github.workspace }}\G910 Logitech Utilities.sln" /t:Rebuild /p:Configuration=Release
-      shell: cmd
-      
-    - name: Download Inno Setup
-      run: |
-        Invoke-WebRequest -Uri "https://jrsoftware.org/download.php/is.exe" -OutFile "is.exe"
-        Start-Process -FilePath .\is.exe -ArgumentList "/VERYSILENT", "/NORESTART", "/SUPPRESSMSGBOXES", "/SP-", "/LOG=innosetup.log" -Wait -NoNewWindow
+      - name: Setup NuGet.exe for use with actions
+        # You may pin to the exact commit or the version.
+        # uses: NuGet/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f
+        uses: NuGet/setup-nuget@v1.2.0
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+      - run: |
+          nuget restore "${{ github.workspace }}\G910 Logitech Utilities.sln"
+        shell: cmd
 
-    - name: Compile Inno Setup script
-      run: |
-        $env:ISCC = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-        & $env:ISCC /O"output" /F"G910 Logitech Utilities" "installer.iss"
+      - name: Setup MSBuild.exe
+        # You may pin to the exact commit or the version.
+        # uses: warrenbuckley/Setup-MSBuild@1176db82e64cd53b4944f0e57c2abec104b4782d
+        uses: warrenbuckley/Setup-MSBuild@v1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: Installer
-        path: "output\G910 Logitech Utilities.exe"
+      - name: MSBuild
+        run: |
+          msbuild "${{ github.workspace }}\G910 Logitech Utilities.sln" /t:Rebuild /p:Configuration=Release
+        shell: cmd
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+      - name: Download Inno Setup
+        run: |
+          Invoke-WebRequest -Uri "https://jrsoftware.org/download.php/is.exe" -OutFile "is.exe"
+          Start-Process -FilePath .\is.exe -ArgumentList "/VERYSILENT", "/NORESTART", "/SUPPRESSMSGBOXES", "/SP-", "/LOG=innosetup.log" -Wait -NoNewWindow
 
-    - name: Upload Installer to Release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: output/G910 Logitech Utilities.exe
-        asset_name: G910 Logitech Utilities.exe
-        asset_content_type: application/octet-stream
+      - name: Compile Inno Setup script
+        run: |
+          $env:ISCC = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          & $env:ISCC /O"output" /F"G910 Logitech Utilities" "installer.iss"
+
+      - name: Debug Environment
+        run: |
+          echo "GitHub Ref: ${{ github.ref }}"
+          echo "GitHub SHA: ${{ github.sha }}"
+          echo "GitHub Event Name: ${{ github.event_name }}"
+          echo "Workspace: ${{ github.workspace }}"
+          echo "Output Path Exists: $(Test-Path \"output\\G910 Logitech Utilities.exe\")"
+          echo "ISCC Path: $(Test-Path \"$env:ProgramFiles(x86)\\Inno Setup 6\\ISCC.exe\")"
+
+      - name: Validate Output Directory
+        run: |
+          if (!(Test-Path "output")) {
+            New-Item -ItemType Directory -Path "output"
+          }
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Installer
+          path: "output\\G910 Logitech Utilities.exe"
+        # Updated to v4 to resolve compatibility issues
+
+      - name: Debug Runner Version
+        run: |
+          if ($env:GITHUB_RUNNER_VERSION) {
+              echo "Runner Version: $env:GITHUB_RUNNER_VERSION"
+          } else {
+              echo "Runner Version: Not Set"
+          }
+          echo "Operating System: $env:GITHUB_RUNNER_OS"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+        # Updated to use github.ref_name to avoid invalid refs/ prefix
+
+      - name: Upload Installer to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: output/G910 Logitech Utilities.exe
+          asset_name: G910 Logitech Utilities.exe
+          asset_content_type: application/octet-stream
