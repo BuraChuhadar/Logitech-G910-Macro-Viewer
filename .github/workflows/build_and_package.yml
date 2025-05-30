@@ -94,10 +94,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+        # Updated to use github.ref_name to avoid invalid refs/ prefix
 
       - name: Upload Installer to Release
         uses: actions/upload-release-asset@v1
