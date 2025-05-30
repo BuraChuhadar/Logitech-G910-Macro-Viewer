@@ -81,7 +81,11 @@ jobs:
 
       - name: Debug Runner Version
         run: |
-          echo "Runner Version: $(Get-Content $env:GITHUB_RUNNER_VERSION)"
+          if ($env:GITHUB_RUNNER_VERSION) {
+              echo "Runner Version: $env:GITHUB_RUNNER_VERSION"
+          } else {
+              echo "Runner Version: Not Set"
+          }
           echo "Operating System: $env:GITHUB_RUNNER_OS"
 
       - name: Create Release
