@@ -77,6 +77,8 @@ jobs:
         with:
           name: Installer
           path: "output\\G910 Logitech Utilities.exe"
+        # Pinning the action version to ensure proper download
+        # Reference: https://github.com/actions/upload-artifact/releases
 
       - name: Create Release
         id: create_release
