@@ -58,10 +58,10 @@ jobs:
         & $env:ISCC /O"output" /F"G910 Logitech Utilities" "installer.iss"
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Installer
-        path: "output\\G910 Logitech Utilities.exe"
+        path: "output\G910 Logitech Utilities.exe"
 
     - name: Create Release
       id: create_release
