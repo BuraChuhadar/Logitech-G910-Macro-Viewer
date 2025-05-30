@@ -57,26 +57,81 @@ namespace G910_Logitech_Utilities
         private void SetStartup(bool enable)
         {
             string? appName = Assembly.GetExecutingAssembly().GetName().Name;
-            string appPath = $@"{System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\{appName}.exe";
-
-            using (RegistryKey? key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            if (string.IsNullOrEmpty(appName))
             {
-                if (key == null)
+                throw new Exception("Application name cannot be null or empty.");
+            }
+
+            string appPath = Assembly.GetExecutingAssembly().Location;
+
+            try
+            {
+                using (RegistryKey? key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
                 {
-                    return;
+                    if (key == null)
+                    {
+                        throw new Exception("Failed to open registry key.");
+                    }
+
+                    if (enable)
+                    {
+                        key.SetValue(appName, $"\"{appPath}\"");
+                        Console.WriteLine("Startup enabled successfully.");
+                    }
+                    else
+                    {
+                        if (key.GetValue(appName) != null)
+                        {
+                            key.DeleteValue(appName);
+                            Console.WriteLine("Startup disabled successfully.");
+                        }
+                    }
                 }
-                if (enable)
-                {
-                    key.SetValue(appName, $"\"{appPath}\"");
-                }
-                else
-                {
-                    key.DeleteValue(appName ?? "", false);
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error setting startup: {ex.Message}");
             }
         }
 
+        private void OpenStartupManager()
+        {
+            StartupManagerWindow startupManagerWindow = new StartupManagerWindow();
+            startupManagerWindow.ShowDialog();
+        }
 
+        private Key _shortcutKey = Key.OemTilde; // Default shortcut key
+        private ModifierKeys _shortcutModifiers = ModifierKeys.Control | ModifierKeys.Alt; // Default modifiers
+
+        private string GetHumanReadableKey(Key key)
+        {
+            return key switch
+            {
+                Key.OemTilde => "Tilde (~)",
+                Key.LeftCtrl => "Left Ctrl",
+                Key.RightCtrl => "Right Ctrl",
+                Key.LeftAlt => "Left Alt",
+                Key.RightAlt => "Right Alt",
+                _ => key.ToString()
+            };
+        }
+
+        private string GetHumanReadableModifiers(ModifierKeys modifiers)
+        {
+            List<string> parts = new List<string>();
+            if (modifiers.HasFlag(ModifierKeys.Control)) parts.Add("Ctrl");
+            if (modifiers.HasFlag(ModifierKeys.Alt)) parts.Add("Alt");
+            if (modifiers.HasFlag(ModifierKeys.Shift)) parts.Add("Shift");
+            if (modifiers.HasFlag(ModifierKeys.Windows)) parts.Add("Windows");
+            return string.Join(" + ", parts);
+        }
+
+        private void OpenShortcutManager()
+        {
+            ShortcutManagerWindow shortcutManagerWindow = new ShortcutManagerWindow(_shortcutKey, _shortcutModifiers);
+            shortcutManagerWindow.ShowDialog();
+            (_shortcutKey, _shortcutModifiers) = shortcutManagerWindow.GetUpdatedShortcut();
+        }
 
         private NotifyIcon _notifyIcon;
 
@@ -96,6 +151,17 @@ namespace G910_Logitech_Utilities
             ToolStripMenuItem exitItem = new ToolStripMenuItem("Exit");
             exitItem.Click += ExitItem_Click;
             _notifyIcon.ContextMenuStrip.Items.Add(exitItem);
+
+            // Add a menu item to open the Startup Manager
+            ToolStripMenuItem startupManagerItem = new ToolStripMenuItem("Startup Manager");
+            startupManagerItem.Click += (s, args) => OpenStartupManager();
+            _notifyIcon.ContextMenuStrip.Items.Add(startupManagerItem);
+
+            // Add a menu item to open the Shortcut Manager
+            ToolStripMenuItem shortcutManagerItem = new ToolStripMenuItem("Shortcut Manager");
+            shortcutManagerItem.Click += (s, args) => OpenShortcutManager();
+            _notifyIcon.ContextMenuStrip.Items.Add(shortcutManagerItem);
+
             _notifyIcon.Visible = true;
             SetStartup(true);
         }

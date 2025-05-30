@@ -33,15 +33,15 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 
 [Files]
-Source: "bin\Release\net7.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\net7.0-windows\App.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Release\net7.0-windows\G910 Logitech Utilities.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "App.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\net7.0-windows\G910 Logitech Utilities.deps.json"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\net7.0-windows\G910 Logitech Utilities.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\net7.0-windows\G910 Logitech Utilities.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\net7.0-windows\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\net7.0-windows\System.Data.SQLite.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\net7.0-windows\log4net.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\net7.0-windows\log4net.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "log4net.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\Release\net7.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
