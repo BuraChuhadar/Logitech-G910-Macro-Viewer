@@ -17,7 +17,14 @@ namespace G910_Logitech_Utilities
             try
             {
                 string? appName = Assembly.GetExecutingAssembly().GetName().Name;
-                string appPath = Assembly.GetExecutingAssembly().Location;
+
+                // Get the actual EXE path instead of the DLL
+                string appPath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? "";
+
+                if (string.IsNullOrEmpty(appPath))
+                {
+                    throw new Exception("Could not determine application path.");
+                }
 
                 using (RegistryKey? key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
                 {
@@ -35,6 +42,7 @@ namespace G910_Logitech_Utilities
                 MessageBox.Show($"Error enabling startup: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private void DisableStartupButton_Click(object sender, RoutedEventArgs e)
         {
