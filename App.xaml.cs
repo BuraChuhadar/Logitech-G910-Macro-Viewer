@@ -46,7 +46,7 @@ namespace G910_Logitech_Utilities
         {
             if (e.ExceptionObject is Exception ex)
             {
-                Logger.Fatal( "An unhandled exception occurred in the application domain.", ex);
+                Logger.Fatal("An unhandled exception occurred in the application domain.", ex);
             }
             else
             {
@@ -144,7 +144,7 @@ namespace G910_Logitech_Utilities
             MainWindow mainWindow = new MainWindow();
             mainWindow.Hide();
 
-            
+
 
             // Set up context menu for the NotifyIcon
             _notifyIcon.ContextMenuStrip = new ContextMenuStrip();
